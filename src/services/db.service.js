@@ -1,8 +1,6 @@
 const {MongoClient, ObjectID} = require('mongodb');
-
 const dbConfig = require('../configs/db.config');
 const helper = require('../utils/helper.util');
-const config = require('../configs/general.config');
 
 
 async function get(query, limit) {
@@ -26,14 +24,14 @@ async function get(query, limit) {
   });
 }
 
-async function getById(id) {
+async function getById(email) {
   return new Promise(async (resolve, reject) => {
     const client = new MongoClient(dbConfig.url);
     try {
       await client.connect();
       const db = client.db(dbConfig.dbName);
 
-      item = await db.collection('users').findOne({ _id: ObjectID(id) });
+      const item = await db.collection('users').findOne({ email });
       resolve(item);
       client.close();
     } catch (error) {
@@ -52,7 +50,7 @@ async function add(item) {
 
       const addedItem = await db.collection('users').insertOne(item);
 
-      resolve(addedItem.ops[0]);
+      resolve(addedItem);
       client.close();
     } catch (error) {
       reject(error)

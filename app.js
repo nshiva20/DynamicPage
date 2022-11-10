@@ -1,9 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 const claimsRouter = require('./src/routes/claims.route');
+const userRouter = require('./src/routes/users.route');
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
@@ -16,6 +19,8 @@ app.get('/', (req, res) => {
 })
 
 app.use('/claims', claimsRouter);
+
+app.use('/user', userRouter);
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {
