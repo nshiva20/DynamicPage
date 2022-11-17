@@ -5,6 +5,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const claimsRouter = require('./src/routes/claims.route');
 const userRouter = require('./src/routes/users.route');
+//const mongoose = require('mongoose');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -33,4 +34,17 @@ app.use((err, req, res, next) => {
 
 app.listen(port, '0.0.0.0', () => {
   console.log(`Example app listening at http://localhost:${port}`)
+});
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin,X-Requested-With,Content-Type,Accept"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+  );
+  next();
 });
