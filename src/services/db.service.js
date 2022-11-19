@@ -1,7 +1,5 @@
-const {MongoClient, ObjectID} = require('mongodb');
+const { MongoClient, ObjectID } = require('mongodb');
 const dbConfig = require('../configs/db.config');
-const helper = require('../utils/helper.util');
-
 
 async function get(query, limit) {
   return new Promise(async (resolve, reject) => {

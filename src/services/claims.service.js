@@ -1,21 +1,17 @@
 const {MongoClient, ObjectID} = require('mongodb');
-//const { default: mongoose } = require('mongoose');
-//const Claims = require('../DynamicPage/src/models/claims');
-
 const dbConfig = require('../configs/db.config');
-const helper = require('../utils/helper.util');
 
 async function add(item) {
     return new Promise(async (resolve, reject) => {
       const client = new MongoClient(dbConfig.url);
       try {
         await client.connect();
-        const db = client.db();
+        const db = client.db(dbConfig.dbName);
   
         const addedItem = await db.collection('claims').insertOne(item);
   
         resolve(addedItem.ops[0]);
-        //client.close();
+        client.close();
       } catch (error) {
         reject(error)
       }
@@ -28,7 +24,7 @@ async function add(item) {
       const client = new MongoClient(dbConfig.url);
       try {
         await client.connect();
-        const db = client.db();
+        const db = client.db(dbConfig.dbName);
   
         const items = db.collection('claims').find(query);
   
@@ -51,13 +47,12 @@ async function add(item) {
           await client.connect();
           const db = client.db(dbConfig.dbName);      
          
-          const updatedItem = await db.collection('claims').insertOne({claimsDetails });
-          //const updatedItem = await db.collection('users').findOneAndUpdate({claimsDetails,claimsDetails });
+          const filter = {'email':email};
+          const options = { returnDocument:'after',upsert:true};
+          const updatedItem = await db.collection('users').findOneAndUpdate(filter,{$set:{'claimsDetails':claimsDetails}},options);
+          
           resolve(updatedItem.value);
-          console.log('updated item',updatedItem);
-          console.log('updated item value',updatedItem.value);
-    
-          //client.close();
+          client.close();
         } catch (error) {
           reject(error)
         }
@@ -71,7 +66,7 @@ async function getById(email) {
     try {
       await client.connect();
       const db = client.db(dbConfig.dbName);
-      //const db = client.db();
+
       const item = await db.collection('users').findOne({ email });
       resolve(item);
       client.close();
@@ -83,10 +78,8 @@ async function getById(email) {
 }
 
   module.exports = {
-    //loadData,
     get,
     getById,
     add,
-    update,
-    //remove
+    update
   }

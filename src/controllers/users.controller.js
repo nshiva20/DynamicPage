@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const userService = require('../services/db.service');
 const secretKey = require("../configs/algo.config");
 
-function generateAuthToken(details){
+function generateAuthToken(details) {
     let token;
     try {
         token = jwt.sign(
@@ -11,7 +11,7 @@ function generateAuthToken(details){
             secretKey,
             { expiresIn: "1h" }
         );
-        
+
     } catch (err) {
         console.error(err);
         const error = new Error("Error! while generating token.");
@@ -20,7 +20,7 @@ function generateAuthToken(details){
     return token;
 }
 
-async function  get(req, res, next) {
+async function get(req, res, next) {
     let userDetails;
     try {
 
@@ -41,21 +41,21 @@ async function  get(req, res, next) {
 
 async function login(req, res, next) {
     let { email, password } = req.body;
-    
-    let existingUser,token;
+
+    let existingUser, token;
     try {
         existingUser = await userService.getById(email);
 
-        if (!existingUser){
+        if (!existingUser) {
             return res
-                    .status(404)
-                    .json({
-                        success: false,
-                        message: "User not found !"
-                    });
+                .status(404)
+                .json({
+                    success: false,
+                    message: "User not found !"
+                });
         }
-        
-        bcrypt.compare( password, existingUser.password, async function(error,isMatch){
+
+        bcrypt.compare(password, existingUser.password, async function (error, isMatch) {
             if (error) {
                 throw error;
             } else if (!existingUser || !isMatch) {
@@ -66,9 +66,9 @@ async function login(req, res, next) {
                         message: "Incorrect password !"
                     });
             } else {
-                            
+
                 token = await generateAuthToken(existingUser);
-                
+
                 res
                     .status(200)
                     .json({
@@ -84,17 +84,17 @@ async function login(req, res, next) {
         console.error(`Error while login`, err.message);
         next(err);
     }
-   
+
 }
 
 async function create(req, res, next) {
     let existingUser, newUser, token;
-    
+
     try {
 
         existingUser = await userService.getById(req.body.email);
 
-        if(existingUser){
+        if (existingUser) {
             return res
                 .status(409)
                 .json({
@@ -124,7 +124,7 @@ async function create(req, res, next) {
         }
 
         token = await generateAuthToken(newUser);
-        
+
         res
             .status(201)
             .json({
