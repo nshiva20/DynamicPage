@@ -13,6 +13,8 @@ router.post('/signUp', userController.create);
 
 router.put('/:id', userController.update);
 
+router.patch('/resetPassword', userController.resetPassword);
+
 router.delete('/:id', userController.remove);
 
 module.exports = router;

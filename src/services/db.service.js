@@ -57,6 +57,26 @@ async function add(item) {
 
 }
 
+async function updatePassword(email, newValue) {
+  return new Promise(async (resolve, reject) => {
+    const client = new MongoClient(dbConfig.url);
+    try {
+      await client.connect();
+      const db = client.db(dbConfig.dbName);
+
+      const filter = { 'email': email };
+      const options = { returnDocument: 'after', upsert: true, multi: false };
+      const updatedItem = await db.collection('users').findOneAndUpdate(filter, { $set: { 'password': newValue } }, options);
+
+      resolve(updatedItem.value);
+
+      client.close();
+    } catch (error) {
+      reject(error)
+    }
+  });
+}
+
 async function update(id, newItem) {
   return new Promise(async (resolve, reject) => {
     const client = new MongoClient(dbConfig.url);
@@ -65,6 +85,7 @@ async function update(id, newItem) {
       const db = client.db(dbConfig.dbName);
 
       const updatedItem = await db.collection('users').findOneAndReplace({ _id: ObjectID(id) }, newItem, { returnOriginal: false });
+
       resolve(updatedItem.value);
 
       client.close();
@@ -114,5 +135,6 @@ module.exports = {
   getById,
   add,
   update,
+  updatePassword,
   remove
 }

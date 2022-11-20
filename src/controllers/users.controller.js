@@ -33,7 +33,7 @@ async function get(req, res, next) {
             })
 
     } catch (err) {
-        console.error(`Error while updating login`, err.message);
+        console.error(`Error while getting user details`, err.message);
         next(err);
     }
 
@@ -142,11 +142,50 @@ async function create(req, res, next) {
 
 }
 
+async function resetPassword(req, res, next) {
+    
+    try {
+        const existingUser = await userService.getById(req.body.email);
+
+        if (!existingUser) {
+            return res
+                .status(404)
+                .json({
+                    success: false,
+                    message: "User not found !"
+                });
+        }
+
+        bcrypt.genSalt(12, function (saltError, salt) {
+            if (saltError) {
+                throw saltError;
+            } else {
+                bcrypt.hash(req.body.password, salt, async function (hashError, hash) {
+                    if (hashError) {
+                        throw hashError;
+                    } else {
+                        req.body.password = hash;
+                        await userService.updatePassword(req.body.email,req.body.password);
+                    }
+                })
+            }
+        })
+
+        res.status(200).json({
+            success: true,
+            message: "Password updated successfully"
+        });
+    } catch (err) {
+        console.error(`Error while updating password`, err.message);
+        next(err);
+    }
+}
+
 async function update(req, res, next) {
     try {
         res.json(await userService.update(req.params.id, req.body));
     } catch (err) {
-        console.error(`Error while updating login`, err.message);
+        console.error(`Error while updating user`, err.message);
         next(err);
     }
 }
@@ -155,7 +194,7 @@ async function remove(req, res, next) {
     try {
         res.json(await userService.remove(req.params.id));
     } catch (err) {
-        console.error(`Error while deleting login`, err.message);
+        console.error(`Error while deleting user`, err.message);
         next(err);
     }
 }
@@ -164,6 +203,7 @@ module.exports = {
     get,
     create,
     update,
+    resetPassword,
     remove,
     login
 };
