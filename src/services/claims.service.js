@@ -49,7 +49,7 @@ async function add(item) {
          
           const filter = {'email':email};
           const options = { returnDocument:'after',upsert:true};
-          const updatedItem = await db.collection('users').findOneAndUpdate(filter,{$set:{'claimsDetails':claimsDetails}},options);
+          const updatedItem = await db.collection('users').findOneAndUpdate(filter,{$push:{'claimsDetails':claimsDetails}},options);
           
           resolve(updatedItem.value);
           client.close();
