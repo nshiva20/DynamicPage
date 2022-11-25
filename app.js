@@ -5,6 +5,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const claimsRouter = require('./src/routes/claims.route');
 const userRouter = require('./src/routes/users.route');
+const adminRouter = require('./src/routes/admins.route');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -21,6 +22,8 @@ app.get('/', (req, res) => {
 app.use('/claims', claimsRouter);
 
 app.use('/user', userRouter);
+
+app.use('/admin', adminRouter);
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {

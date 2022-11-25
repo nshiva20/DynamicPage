@@ -2,7 +2,6 @@ const {MongoClient, ObjectID} = require('mongodb');
 const dbConfig = require('../configs/db.config');
 const helper = require('../utils/helper.util');
 
-
 async function get() {
   return new Promise(async (resolve, reject) => {
     const client = new MongoClient(dbConfig.url);
@@ -11,8 +10,7 @@ async function get() {
       const db = client.db(dbConfig.dbName);
 
       const items = db.collection('users').find({}); 
-    
-
+  
       resolve(await items.toArray());
       client.close();
     } catch (error) {
@@ -21,10 +19,6 @@ async function get() {
 
   });
 }
-
-
-
-
 
 async function update(id, newItem) {
   return new Promise(async (resolve, reject) => {
@@ -43,13 +37,7 @@ async function update(id, newItem) {
   });
 }
 
-
-
-
 module.exports = {
-  
   get,
- 
-  update,
-  
+  update  
 }

@@ -1,11 +1,8 @@
-
 const adminService = require('../services/admins.service');
 
-
-
-async function  get(req, res, next) {
+async function get(req, res, next) {
     try {
-        
+
         res.json(await adminService.get());
     } catch (err) {
         console.error(`Error while getting user details `, err.message);
@@ -14,12 +11,8 @@ async function  get(req, res, next) {
 
 }
 
-
-
-
-
 async function update(req, res, next) {
-    try { 
+    try {
         res.json(await adminService.update(req.params.id, req.body));
         // findOnenandReplae 
     } catch (err) {
@@ -28,10 +21,7 @@ async function update(req, res, next) {
     }
 }
 
-
-
 module.exports = {
     get,
-    update,
-    
+    update
 };
