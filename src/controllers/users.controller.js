@@ -143,7 +143,7 @@ async function create(req, res, next) {
 }
 
 async function resetPassword(req, res, next) {
-    
+
     try {
         const existingUser = await userService.getById(req.body.email);
 
@@ -165,7 +165,7 @@ async function resetPassword(req, res, next) {
                         throw hashError;
                     } else {
                         req.body.password = hash;
-                        await userService.updatePassword(req.body.email,req.body.password);
+                        await userService.updatePassword(req.body.email, req.body.password);
                     }
                 })
             }
@@ -181,29 +181,9 @@ async function resetPassword(req, res, next) {
     }
 }
 
-async function update(req, res, next) {
-    try {
-        res.json(await userService.update(req.params.id, req.body));
-    } catch (err) {
-        console.error(`Error while updating user`, err.message);
-        next(err);
-    }
-}
-
-async function remove(req, res, next) {
-    try {
-        res.json(await userService.remove(req.params.id));
-    } catch (err) {
-        console.error(`Error while deleting user`, err.message);
-        next(err);
-    }
-}
-
 module.exports = {
     get,
     create,
-    update,
     resetPassword,
-    remove,
     login
 };

@@ -8,13 +8,9 @@ router.get('/accessResource', auth.get);
 router.get('/details', auth.get, userController.get);
 
 router.post('/login', userController.login);
-  
+
 router.post('/signUp', userController.create);
 
-router.put('/:id', userController.update);
-
-router.patch('/resetPassword', userController.resetPassword);
-
-router.delete('/:id', userController.remove);
+router.put('/resetPassword', userController.resetPassword);
 
 module.exports = router;
