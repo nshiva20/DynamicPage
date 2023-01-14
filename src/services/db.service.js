@@ -56,8 +56,29 @@ async function updatePassword(email, newValue) {
   });
 }
 
+async function updatePremiumDetails(email, newValues) {
+  return new Promise(async (resolve, reject) => {
+    const client = new MongoClient(dbConfig.url);
+    try {
+      await client.connect();
+      const db = client.db(dbConfig.dbName);
+
+      const filter = { 'email': email };
+      const options = { returnDocument: 'after', upsert: true, multi: false };
+      const updatedItem = await db.collection('users').findOneAndUpdate(filter, { $set:  newValues }, options);
+
+      resolve(updatedItem.value);
+
+      client.close();
+    } catch (error) {
+      reject(error)
+    }
+  });
+}
+
 module.exports = {
   getById,
   add,
-  updatePassword
+  updatePassword,
+  updatePremiumDetails
 }

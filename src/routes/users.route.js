@@ -13,4 +13,6 @@ router.post('/signUp', userController.create);
 
 router.put('/resetPassword', userController.resetPassword);
 
+router.put('/updatePremium', auth.get, userController.updatePremium);
+
 module.exports = router;

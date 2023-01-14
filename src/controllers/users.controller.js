@@ -181,9 +181,27 @@ async function resetPassword(req, res, next) {
     }
 }
 
+async function updatePremium(req, res, next) {
+
+    try {
+
+        await userService.updatePremiumDetails(req.user.email, req.body);
+
+        res.status(200).json({
+            success: true,
+            message: "Premium added successfully"
+        });
+
+    } catch (err) {
+        console.error(`Error while updating Premium details`, err.message);
+        next(err);
+    }
+}
+
 module.exports = {
     get,
     create,
     resetPassword,
-    login
+    login,
+    updatePremium
 };
