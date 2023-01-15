@@ -37,7 +37,7 @@ async function getUserDetails(email) {
   });
 }
 async function updateStatus(data) {
-
+console.log(JSON.stringify(data))
   return new Promise(async (resolve, reject) => {
     const client = new MongoClient(dbConfig.url);
     try {
@@ -46,7 +46,7 @@ async function updateStatus(data) {
 
       const filter = { 'email': data.email, 'claimsDetails.ClaimNum': data.claimId };
 
-      const updatedItem = await db.collection('users').findOneAndUpdate(filter, { $set: { 'claimsDetails.$.claimStatus': data.claimStatus } });
+      const updatedItem = await db.collection('users').findOneAndUpdate(filter, { $set: { 'claimsDetails.$.claimStatus': data.claimStatus, "totalBalance":data.CurrentBalance } });
 
       resolve(updatedItem.value);
 
