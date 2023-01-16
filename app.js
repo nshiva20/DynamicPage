@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3004;
+const ip='10.198.188.116';
 const claimsRouter = require('./src/routes/claims.route');
 const userRouter = require('./src/routes/users.route');
 const adminRouter = require('./src/routes/admins.route');
@@ -33,6 +34,6 @@ app.use((err, req, res, next) => {
   return;
 });
 
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+app.listen(port, ip, () => {
+  console.log(`Example app listening at ${ip}:${port}`)
 });
