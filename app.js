@@ -16,8 +16,8 @@ app.use(
   })
 );
 
-app.get('/', (req, res) => {
-  res.json({ 'message': 'ok' });
+app.get('/healthCheck', (req, res) => {
+  res.json({ 'message': 'API Service is up and running' });
 })
 
 app.use('/claims', claimsRouter);
